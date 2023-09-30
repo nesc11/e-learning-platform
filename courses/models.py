@@ -47,4 +47,33 @@ class Content(models.Model):
     module = models.ForeignKey(to=Module,
                                on_delete=models.CASCADE,
                                related_name='contents')
-    content_type = models.ForeignKey(to=)
+    content_type = models.ForeignKey(to=ContentType,
+                                     on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    item = GenericForeignKey('content_type', 'object_id')
+
+class ItemBase(models.Model):
+    owner = models.ForeignKey(to=User,
+                              on_delete=models.CASCADE,
+                              related_name='%(class)s_related')
+    title = models.CharField(max_length=250)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.title
+    
+class Text(ItemBase):
+    content = models.TextField()
+
+class File(ItemBase):
+    content = models.FileField(upload_to='files')
+
+class Image(ItemBase):
+    content = models.ImageField(upload_to='images')
+
+class Video(ItemBase):
+    content = models.URLField()
