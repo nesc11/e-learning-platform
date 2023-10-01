@@ -31,7 +31,7 @@ class Course(models.Model):
     class Meta:
         ordering = ['-created']
 
-    def __atr__(self):
+    def __str__(self):
         return self.title
     
 
