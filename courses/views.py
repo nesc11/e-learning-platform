@@ -1,11 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators.http import require_POST
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
 from courses.models import Course
-from courses.forms import CourseForm
+from courses.forms import CourseForm, ModuleFormSet
 
 # Create your views here.
 @login_required
@@ -59,3 +55,19 @@ def list_courses(request):
     return render(request, 'courses/manage/course_list.html', {
         'courses': courses
     })
+
+@login_required
+@permission_required('courses.change_course', raise_exception=True)
+def update_module(request, pk):
+    course = get_object_or_404(Course, pk=pk, owner=request.user)
+    formset = ModuleFormSet(instance=course)
+    if request.method == 'POST':
+        formset = ModuleFormSet(data=request.POST, instance=course)
+        if formset.is_valid():
+            formset.save()
+            return redirect('courses:course-list')
+    return render(request, 'courses/manage/module/formset.html', {
+        'formset': formset,
+        'course': course
+    })
+
