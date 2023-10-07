@@ -172,3 +172,17 @@ cython_debug/
 #.idea/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
+
+
+### replit ###
+# Replit config file
+.replit
+
+# Replit Nix config file
+replit.nix
+
+.pythonlibs/
+poetry.lock
+pyproject.toml
+
+# End of https://www.toptal.com/developers/gitignore/api/replit
