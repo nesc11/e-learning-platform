@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if subject %}
+{{ subject.title }} courses
+{% else %}
+All courses
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>
+    {% if subject %}
+    {{ subject.title }} courses
+    {% else %}
+    All courses
+    {% endif %}
+</h1>
+<div class="contents">
+    <h3>Subjects</h3>
+    <nav class="nav nav-pills flex-column flex-sm-row subjects-nav">
+        {% if subject %}
+        <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'course-list' %}">All</a>
+        {% else %}
+        <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="{% url 'course-list' %}">All</a>
+        {% endif %}
+        {% for sub in subjects %}
+        {% if sub == subject %}
+        <a class="flex-sm-fill text-sm-center nav-link active" aria-current="page" href="{% url 'courses:course-list-by-subject' sub.slug %}">{{ sub.title }}</a>
+        {% else %}
+        <a class="flex-sm-fill text-sm-center nav-link" href="{% url 'courses:course-list-by-subject' sub.slug %}">{{ sub.title }}</a>
+        {% endif %}
+        {% endfor %}
+    </nav>
+    <hr>
+</div>
+<div class="module">
+    {% for course in courses %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ course.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">{{ course.owner.username }}</h6>
+            <p class="card-text">{{ course.overview|truncatechars:50 }}</p>
+            <a href="{% url 'courses:course-detail' course.slug %}" class="card-link">Visit course</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

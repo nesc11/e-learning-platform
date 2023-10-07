@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ object.title }}
+{% endblock %}
+
+{% block content %}
+<div class="course-detail-overview-section">
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'courses:course-list-by-subject' course.subject.slug %}">{{ course.subject }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ course.title }}</li>
+        </ol>
+    </nav>
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.overview }}</p>
+    <p>Created by: <span>{{ course.owner.username }}</span></p>
+    {% if request.user.is_authenticated %}
+    <form action="{% url 'students:course-enroll' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Enroll now">
+    </form>
+    {% else %}
+    <a href="{% url 'students:student-register' %}" class="button">Register to enroll</a>
+    {% endif %}
+</div>
+<hr>
+<div class="course-detail-modules-section">
+    <h3>Course content</h3>
+    <p>
+        <span>{{ course.modules.count }} module{{ course.modules.count|pluralize }}</span>
+    </p>
+    <div class="accordion" id="accordionExample">
+        {% for m in course.modules.all %}
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                {{ m.title }}
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                <div class="list-group">
+                  {% for c in m.contents.all %}
+                  <a href="#" class="list-group-item list-group-item-action">{{ c.item.title }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+</div>
+{% endblock %}

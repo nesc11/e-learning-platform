@@ -18,14 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
 from django.contrib.auth.views import LoginView, LogoutView
+from courses.views import list_courses
 
 urlpatterns = [
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('accounts/logout/', LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
-    path('course/', include('courses.urls', namespace='courses'))
+    path('courses/', include('courses.urls', namespace='courses')),
+    path('', list_courses, name='course-list'),
+    
+    # Students
+    path('students/', include('students.urls', namespace='students')),
+    # API
+    path('api/', include('courses.api.urls', namespace='api'))
 ]
 
 if settings.DEBUG:

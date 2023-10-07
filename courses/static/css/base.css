@@ -1,0 +1,27 @@
+*, *::after, *::before {
+    margin: 0;
+}
+
+#modules {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+    padding: 1em;
+}
+
+.subjects-nav {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1em 0;
+}
+
+/* Course Detail Section */
+.course-detail-overview-section, .course-detail-modules-section {
+    width: 90%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+.course-detail-overview-section {
+    max-width: 1000px;
+}
